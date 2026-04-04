@@ -22,9 +22,11 @@ import java.util.List;
  */
 public class ListaPacientes {
 
-    List<Paciente> listaPacientes = new ArrayList<Paciente>();
+    List<Paciente> listaPacientes = new ArrayList<>();
     String nombreArchivo;
-
+    
+    
+    //Constructor que pide el archivo, y genera la lista de pacientes en base del csv
     public ListaPacientes(String nombreArchivo) {
         this.nombreArchivo = nombreArchivo;
         try (BufferedReader br = (new BufferedReader(new FileReader(nombreArchivo)))) {
@@ -36,7 +38,7 @@ public class ListaPacientes {
                 String[] campos = linea.split(",");
 
                 //La idea es que la primera linea contenga los nombres de cada dato
-                //El csv debería tener este orden: id, nombre, eps, fechanacimiento
+                //El csv debería tener este orden: id, nombre, eps, fecha nacimiento
                 if (esPrimeraLinea) {
                     esPrimeraLinea = false;
                     continue;
@@ -58,11 +60,13 @@ public class ListaPacientes {
 
     }
 
+    //Util para mostrar la lista de pacientes
     public List<Paciente> getListaPacientes() {
         return listaPacientes;
     }
 
-    public void addPaciente(Paciente p) {
+    //Añade un paciente a la lista, guardar csv
+    public void addPaciente(Paciente p, boolean guardarCSV) {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(nombreArchivo, true))) {
             listaPacientes.add(p);
             bw.newLine();
@@ -72,6 +76,7 @@ public class ListaPacientes {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        if(guardarCSV) rescribirArchivo();
     }
 
     public void borrarPaciente(int idPaciente, boolean guardarCSV) {
@@ -91,17 +96,17 @@ public class ListaPacientes {
     }
 
     //Organizar lista por ID, si guardar con este orden al csv
-    public void organizarListaPorID(boolean guardar) {
+    public void organizarListaPorID(boolean guardarCSV) {
         listaPacientes.sort((o1, o2) -> Integer.compare(o1.getId(), o2.getId()));
-        if (guardar) {
+        if (guardarCSV) {
             rescribirArchivo();
         }
     }
 
     //Organizar lista por Nombre, guardar con este orden al csv
-    public void organizarListaPorNombre(boolean guardar) {
+    public void organizarListaPorNombre(boolean guardarCSV) {
         listaPacientes.sort(Comparator.comparing(Paciente::getNombre, String.CASE_INSENSITIVE_ORDER));
-        if (guardar) {
+        if (guardarCSV) {
             rescribirArchivo();
         }
     }
