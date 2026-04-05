@@ -17,7 +17,8 @@ import java.util.List;
 
 /**
  *
- * @author El_Sanster Inicializa una lista de clase Paciente y carga datos desde
+ * @author El_Sanster 
+ * Inicializa una lista de clase Paciente y carga datos desde
  * el csv
  */
 public class ListaPacientes {
@@ -63,6 +64,13 @@ public class ListaPacientes {
     //Util para mostrar la lista de pacientes
     public List<Paciente> getListaPacientes() {
         return listaPacientes;
+    }
+    
+    public void imprimirListaPacientes(){
+        System.out.println("ID | Nombre | EPS | Fecha de Nacimiento");
+        for (Paciente paciente : listaPacientes) {
+            System.out.println(paciente.toString());
+        }
     }
 
     //Añade un paciente a la lista, guardar csv
