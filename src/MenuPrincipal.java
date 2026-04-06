@@ -1,55 +1,61 @@
-
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 import main.ListaPacientes;
-
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 /**
  *
- * @author elsanster
+ * @author elsanster & Natt
  */
 public class MenuPrincipal {
 
-    static String filename;
+    static String filename = "";
     static ListaPacientes listaDePacientes;
     static Scanner sc = new Scanner(System.in);
 
     public static void main(String[] args) {
         System.out.println("Sistema Hospitalario");
         
+        
         //Loop para no salir hasta que se ingrese 7
         while (true) {
             //Si la lista de pacientes es nula, crearla
             if (listaDePacientes == null) {
                 if (filename.isBlank()) {
-                    System.out.print("Ingrese el archivo de la lista de pacientes (.csv) (creará uno nuevo si no existe):");
-                    if (sc.hasNext()) {
-                        filename = sc.nextLine();
-                    }else{
-                        System.err.println("Ingrese un nombre porfavor.");
+                    System.out.print("Ingrese el archivo de la lista de pacientes (.csv) (creara uno nuevo si no existe):");
+                    filename = sc.nextLine();
+                    
+                    // si se deja vacio el campo
+                    if (filename.isBlank()) {
+                    System.err.println("error: el nombre del archivo no puede estar vacio.");
+                    continue;
+                    }
+                    
+                    // Asegurar que tenga la extension .csv
+                    if (!filename.toLowerCase().endsWith(".csv")) {
+                        filename += ".csv";
+                }
+
+                //Creamos el archivo .csv si no existe 
+                File archivo = new File(filename);
+                if (!archivo.exists()) {
+                    System.out.println("El archivo '" + filename + "' no existe. Creando uno nuevo...");
+                    try {
+                        if (archivo.createNewFile()) {
+                            System.out.println("Archivo creado exitosamente.");
+                        }
+                    } catch (IOException e) {
+                        System.err.println("No se pudo crear el archivo: " + e.getMessage());
+                        filename = "";
                         continue;
                     }
+                } else {
+                    System.out.println("Archivo '" + filename + "' encontrado. Cargando datos...");
                 }
-
-                //Abrimos el archivo temporalmente para verificar acceso
-                try (BufferedWriter bw = new BufferedWriter(new FileWriter(filename, true))) {
-                    System.out.println("Acceso a archivo "+filename+" Exitoso");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    continue;
-                }
-
                 listaDePacientes = new ListaPacientes(filename);
-                listaDePacientes.rescribirArchivo(); //Agrega la cabecera de nombres de dato
+                listaDePacientes.rescribirArchivo();
             }
             //Ir al menú principal
-            System.out.println("===Menú principal===\nIngrese el número para alguna de las siguientes opciones:\nNota: En todas las opciones se pregunta por ");
+            System.out.println("===Menu principal===\nIngrese el numero para alguna de las siguientes opciones:\nNota: En todas las opciones se pregunta por ");
             System.out.println("""
                                1. Obtener lista de pacientes en la lista
                                2. Agregar paciente a la lista
@@ -62,28 +68,28 @@ public class MenuPrincipal {
             
             int op = -1;
             try {
-                op = sc.nextInt();
-            }catch(InputMismatchException e ){
-                System.err.println("Ingrese un número");
+                //usamos nextline y parseint para evitar saltar el menu
+                op = Integer.parseInt(sc.nextLine());
+            } catch(InputMismatchException e ){
+                System.err.println("error: Ingrese un numero valido");
+                continue; // sirve para mostrar el menu inmediatamente despues de darle a alguna opcion
             }
             switch (op) {
-                case 1:
-                    break;
-                case 2:
-                    break;
-                case 3:
-                    break;
-                case 4:
-                    break;
-                case 5:
-                    break;
-                case 6:
-                    break;
-                case 7:
+                case 1 -> listaDePacientes.imprimirListaPacientes();
+                case 2 -> listaDePacientes.agregarPaciente(sc);
+                case 3 -> listaDePacientes.borrarPaciente(sc);
+                case 4 -> listaDePacientes.organizarListaPorID(true);
+                case 5 -> {
+                    }
+                case 6 -> {
+                    }
+                case 7 -> {
                     return;
-                default:
-                    System.out.println("Ingrese una opción válida");
+                    }
+                default -> System.out.println("Ingrese una opcion valida");
+                }
             }
         }
     }
 }
+

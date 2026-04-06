@@ -1,14 +1,8 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package main;
-
 import java.time.LocalDate;
-
 /**
  *
- * @author El_Sanster
+ * @author El_Sanster & Natt
  * Esta clase solo sirve para cargar los datos a la memoria
  * obtener datos cargados previamente de la clase de lista de pacientes
  */

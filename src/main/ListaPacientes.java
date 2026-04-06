@@ -1,64 +1,51 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package main;
-
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-
-/**
- *
- * @author El_Sanster 
- * Inicializa una lista de clase Paciente y carga datos desde
- * el csv
+import java.util.*;
+/*
+ * @author El_Sanster & Natt
  */
+
+//Inicializa una lista de clase Paciente y carga datos desde * el csv
 public class ListaPacientes {
 
     List<Paciente> listaPacientes = new ArrayList<>();
     String nombreArchivo;
     
-    
     //Constructor que pide el archivo, y genera la lista de pacientes en base del csv
     public ListaPacientes(String nombreArchivo) {
         this.nombreArchivo = nombreArchivo;
-        try (BufferedReader br = (new BufferedReader(new FileReader(nombreArchivo)))) {
+        File archivo = new File(nombreArchivo);
 
-            String linea;
-            boolean esPrimeraLinea = true;
-
-            while ((linea = br.readLine()) != null) {
-                String[] campos = linea.split(",");
-
+            if (archivo.exists() && archivo.length() > 0) {
+            try (BufferedReader br = new BufferedReader(new FileReader(nombreArchivo))) {
+                
+                String linea;
+                boolean esprimeralinea = true;
+                
                 //La idea es que la primera linea contenga los nombres de cada dato
                 //El csv debería tener este orden: id, nombre, eps, fecha nacimiento
-                if (esPrimeraLinea) {
-                    esPrimeraLinea = false;
-                    continue;
+                
+                while ((linea = br.readLine()) != null) {
+                    if (esprimeralinea) {
+                        esprimeralinea = false;
+                        continue;
+                    }
+                    String[] campos = linea.split(",");
+                    if (campos.length >= 4) {
+                        int id = Integer.parseInt(campos[0]);
+                        String nombre = campos[1];
+                        String eps = campos[2];
+                        LocalDate fechanacimiento = LocalDate.parse(campos[3]);
+
+                        Paciente p = new Paciente(nombre, eps, fechanacimiento, id);
+                        listaPacientes.add(p);
+                    }
                 }
-
-                int id = Integer.parseInt(campos[0]);
-                String nombre = campos[1], eps = campos[2];
-                LocalDate fechaNacimiento = LocalDate.parse(campos[3]);
-
-                Paciente p = new Paciente(nombre, eps, fechaNacimiento, id);
-                listaPacientes.add(p);
+            } catch (IOException | NumberFormatException e) {
+                System.err.println("error al cargar datos: " + e.getMessage());
             }
-
-        } catch (FileNotFoundException e) {
-            System.err.println("Archivo no encontrado, verifique nombre/existencia del archivo");
-        } catch (IOException e) {
-            e.printStackTrace();
         }
-
     }
 
     //Util para mostrar la lista de pacientes
@@ -67,6 +54,10 @@ public class ListaPacientes {
     }
     
     public void imprimirListaPacientes(){
+        if (listaPacientes.isEmpty()){
+            System.out.println("La lista esta vacia.");
+            return;
+        }
         System.out.println("ID | Nombre | EPS | Fecha de Nacimiento");
         for (Paciente paciente : listaPacientes) {
             System.out.println(paciente.toString());
@@ -74,41 +65,69 @@ public class ListaPacientes {
     }
 
     //Añade un paciente a la lista, guardar csv
-    public void addPaciente(Paciente p, boolean guardarCSV) {
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(nombreArchivo, true))) {
-            listaPacientes.add(p);
-            bw.newLine();
-            bw.append(p.getId() + "," + p.getNombre() + "," + p.getEps() + "," + p.getFechaNacimiento());
-        } catch (FileNotFoundException e) {
-            System.err.println("Archivo no encontrado, verifique nombre/existencia del archivo");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        if(guardarCSV) rescribirArchivo();
-    }
-
-    public void borrarPaciente(int idPaciente, boolean guardarCSV) {
-        boolean eliminado = false;
-        for (Paciente e : listaPacientes) {
-            if (e.getId() == idPaciente) {
-                eliminado = true;
-                listaPacientes.remove(e);
+    public void agregarPaciente(Scanner sc) {
+        
+        try {
+            System.out.println("--- agregar nuevo paciente ---");
+            System.out.println("Ingrese el id: ");
+            int id = Integer.parseInt(sc.nextLine());
+            
+            System.out.println("Ingrese nombre completo: ");
+            String nombre = sc.nextLine();
+            
+            System.out.println("Ingrese la eps: ");
+            String eps = sc.nextLine();
+            
+            System.out.println("Ingrese fecha de nacimiento (aaaa-mm-dd): ");
+            String fechatxt = sc.nextLine();
+            LocalDate fechaNac = LocalDate.parse(fechatxt);
+            
+            Paciente nuevo = new Paciente (nombre , eps, fechaNac, id);
+            this.agregarNuevoPaciente(nuevo, true);
+            
+            System.out.println("Paciente agregado a la lista exitosamente.");
+            }  catch (NumberFormatException e) {
+                System.out.println("error: el id debe sesr un numero entero");
+            }  catch (java.time.format.DateTimeParseException e){
+                System.err.println("error: formato de fecha invalido (usa aaaa-mm-dd");
             }
-        }
-        if(eliminado) System.out.println("Paciente encontrado e eliminado de la lista.");
-        else System.out.println("Ningún paciente concuerda con el ID dado");
-        if (guardarCSV && eliminado) {
+    }
+    public void agregarNuevoPaciente(Paciente p, boolean guardarCSV){
+        listaPacientes.add(p);
+        if (guardarCSV){
             rescribirArchivo();
         }
-        
+    }
+    public void borrarPaciente(Scanner sc) {
+        try{
+            System.out.println("--- Eliminar paciente ---");
+            System.out.println("Ingrese el id del paciente que desea eliminar");
+            
+            int idPaciente = Integer.parseInt(sc.nextLine());
+            boolean eliminado = listaPacientes.removeIf(p -> p.getId() == idPaciente);
+            
+            if (eliminado){
+                System.out.println("Paciente con el id '"+idPaciente+"' eliminado exitosamente");
+                this.rescribirArchivo();
+                System.out.println("Archivo actualizado correctamente.");
+                
+            }else{
+                System.out.println("No se encontro ningun paciente con ese id.");
+            }
+        } catch(NumberFormatException e){
+            System.err.println("error: El id debe ser un numero entero.");
+        }
     }
 
     //Organizar lista por ID, si guardar con este orden al csv
     public void organizarListaPorID(boolean guardarCSV) {
-        listaPacientes.sort((o1, o2) -> Integer.compare(o1.getId(), o2.getId()));
-        if (guardarCSV) {
-            rescribirArchivo();
+        if (listaPacientes.isEmpty()) {
+            System.out.println("la lista esta vacia.");
         }
+        //ordenamos usando un comparador por el atributo de id
+        listaPacientes.sort((o1, o2) -> Integer.compare(o1.getId(), o2.getId()));
+        this.rescribirArchivo();
+        System.out.println("Lista organizada por id exitosamente.");
     }
 
     //Organizar lista por Nombre, guardar con este orden al csv
@@ -133,8 +152,6 @@ public class ListaPacientes {
         } catch (FileNotFoundException e) {
             System.err.println("Archivo no encontrado, verifique nombre/existencia del archivo");
         } catch (IOException e) {
-            e.printStackTrace();
         }
     }
-
 }
