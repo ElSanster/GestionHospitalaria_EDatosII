@@ -132,23 +132,24 @@ public class ListaPacientes {
 
     //Organizar lista por Nombre, guardar con este orden al csv
     public void organizarListaPorNombre(boolean guardarCSV) {
-        listaPacientes.sort(Comparator.comparing(Paciente::getNombre, String.CASE_INSENSITIVE_ORDER));
-        if (guardarCSV) {
-            rescribirArchivo();
+        if (listaPacientes.isEmpty()) {
+            System.out.println("la lista esta vacia.");
+            return;
         }
+        // Orden alfabetico de A a la Z
+        listaPacientes.sort((p1, p2) -> p1.getNombre().compareToIgnoreCase(p2.getNombre()));
+        this.rescribirArchivo();
+        System.out.println("Lista organizada por nombre alfabeticamente.");
     }
 
     //Rescribe el archivo actual con la lista existente
     public void rescribirArchivo() {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(nombreArchivo, false))) {
-
             bw.append("ID,Nombre,EPS,Fecha de Nacimiento");
-
             for (Paciente p : listaPacientes) {
                 bw.newLine();
                 bw.append(p.getId() + "," + p.getNombre() + "," + p.getEps() + "," + p.getFechaNacimiento());
             }
-
         } catch (FileNotFoundException e) {
             System.err.println("Archivo no encontrado, verifique nombre/existencia del archivo");
         } catch (IOException e) {

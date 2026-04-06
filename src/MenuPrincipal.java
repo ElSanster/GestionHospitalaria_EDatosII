@@ -62,8 +62,7 @@ public class MenuPrincipal {
                                3. Eliminar paciente de la lista (Por ID o Nombre)
                                4. Organizar lista por ID
                                5. Organizar lista por Nombre
-                               6. Guardar Lista en el archivo
-                               7. Guardar y Salir
+                               6. Guardar y Salir
                                """);
             
             int op = -1;
@@ -79,11 +78,8 @@ public class MenuPrincipal {
                 case 2 -> listaDePacientes.agregarPaciente(sc);
                 case 3 -> listaDePacientes.borrarPaciente(sc);
                 case 4 -> listaDePacientes.organizarListaPorID(true);
-                case 5 -> {
-                    }
+                case 5 -> listaDePacientes.organizarListaPorNombre(true);
                 case 6 -> {
-                    }
-                case 7 -> {
                     return;
                     }
                 default -> System.out.println("Ingrese una opcion valida");
