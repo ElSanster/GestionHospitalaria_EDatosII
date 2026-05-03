@@ -8,9 +8,10 @@ import java.time.LocalDate;
  */
 public class Paciente {
 
-    String nombre, eps;
-    LocalDate fechaNacimiento;
-    int id;
+    private String nombre, eps;
+    private LocalDate fechaNacimiento;
+    private int id;
+    Paciente nodoIzq, nodoDer;
 
     public Paciente(String nombre, String eps, LocalDate fechaNacimiento, int id) {
         this.nombre = nombre;
@@ -19,6 +20,29 @@ public class Paciente {
         this.id = id;
     }
 
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public void setEps(String eps) {
+        this.eps = eps;
+    }
+
+    public void setFechaNacimiento(LocalDate fechaNacimiento) {
+        this.fechaNacimiento = fechaNacimiento;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+    
+    public void setAllData (String nombre, String eps, LocalDate fechaNacimiento, int id){
+        this.nombre = nombre;
+        this.eps = eps;
+        this.fechaNacimiento = fechaNacimiento;
+        this.id = id;
+    }
+    
     public String getNombre() {
         return nombre;
     }
