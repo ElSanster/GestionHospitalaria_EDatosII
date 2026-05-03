@@ -10,7 +10,7 @@ public class Paciente {
 
     private String nombre, eps;
     private LocalDate fechaNacimiento;
-    private int id;
+    int id;
     Paciente nodoIzq, nodoDer;
 
     public Paciente(String nombre, String eps, LocalDate fechaNacimiento, int id) {
@@ -58,9 +58,12 @@ public class Paciente {
     public int getId() {
         return id;
     }
-
+    
+    // Lo cambiamos para que use un formato de colimnas y se vea organizado
+    // pq cuando ejecutamos el codigo de ver la lista, se ve uno sobre otro
     @Override
     public String toString() {
-        return id + "| " + nombre + "|" + eps + "|" + fechaNacimiento ;
+        return String.format("| %-5d | %-20s | %-10s | %-12s |\n",
+                                  id,  nombre,   eps,  fechaNacimiento);
     }
 }
