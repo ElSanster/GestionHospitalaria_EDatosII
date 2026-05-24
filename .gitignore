@@ -1,2 +1,3 @@
 #Evitar subir archivos csv de prueba o lo que sea
 *.csv
+/dist/
