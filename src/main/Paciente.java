@@ -66,4 +66,10 @@ public class Paciente {
         return String.format("| %-5d | %-20s | %-10s | %-12s |\n",
                                   id,  nombre,   eps,  fechaNacimiento);
     }
+    
+    // Para interfaz Gráfica
+    // Devolver un array con datos del usuario
+    public Object[] toArray() {
+        return new Object[]{id, nombre, eps, fechaNacimiento};
+    }
 }

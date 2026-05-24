@@ -217,6 +217,46 @@ public class ListaPacientes {
         }
     }
     
+    // Funciones dedicadas para la interfaz gráfica
+    
+    // Listar el grafo a mostrar en la interfaz, organizada por ID    
+    // Este es una copia de imprimirListaPacientes()
+    public List<Paciente> listaPacientesID(){
+        List<Integer> idsOrdenados = new ArrayList<>(grafoPacientes.keySet());
+        Collections.sort(idsOrdenados);
+        
+        List <Paciente> listaPacientes = new ArrayList<>();
+        for (Integer idPaciente : idsOrdenados) {
+            listaPacientes.add(grafoPacientes.get(idPaciente));
+        }
+        
+        return listaPacientes;
+    }
+    
+    // Listar el grafo a mostrar en la interfaz, organizada por nombre
+    // este es una copia de organizarListaNombre()
+    public List<Paciente> listaPacientesNombre(){
+        // creamos una lista temporal para guardar los pacientes en el grafo
+        List<Paciente> listaTemporal = new ArrayList<>(grafoPacientes.values());
+        
+        // ordenamos de A-Z por el nombre
+        listaTemporal.sort((p1, p2) -> p1.getNombre().compareToIgnoreCase(p2.getNombre()));    
+        return listaTemporal;
+    }
+    
+    public boolean borrarPaciente (int idPaciente){
+        if (grafoPacientes.containsKey(idPaciente)){
+                // eliminamos el vertice
+                grafoPacientes.remove(idPaciente);
+                return true;
+        }else {
+            return false;
+        }
+    }
+    
+    // Verificar que exista este id
+    // 
+    
     public static void main(String[] args){
         //Nombre del archivo CSV donde se guardaran los datos
         String rutaArchivo = "pacientes.csv";

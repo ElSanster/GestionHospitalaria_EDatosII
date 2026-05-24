@@ -4,19 +4,39 @@
  */
 package grafica;
 
+import java.util.List;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import main.ListaPacientes;
+import main.Paciente;
+
 /**
  *
  * @author elsanster
  */
 public class MenuPrincipalGrafica extends javax.swing.JFrame {
-    
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(MenuPrincipalGrafica.class.getName());
+    static ListaPacientes listaPacientes;
+    static private JFrame ventanaPadre;
+    private DefaultTableModel modeloTabla;
+    private String[] columnas = {"ID", "Nombre", "EPS", "Fecha de Nacimiento"};
+    private boolean ordenarID = true;
 
     /**
      * Creates new form MenuPrincipalGrafica
      */
-    public MenuPrincipalGrafica() {
+    public MenuPrincipalGrafica(ListaPacientes listapacientes, JFrame padre) {
         initComponents();
+        this.listaPacientes = listapacientes;
+        this.ventanaPadre = padre;
+        modeloTabla = new DefaultTableModel(columnas, 0);
+        // Settear el modelo de datos
+        TB_ListaPacientes.setModel(modeloTabla);
+        // Hacer que la tabla no se pueda editar
+        TB_ListaPacientes.setDefaultEditor(Object.class, null);
+        actualizarListaPacientes();
     }
 
     /**
@@ -51,29 +71,48 @@ public class MenuPrincipalGrafica extends javax.swing.JFrame {
                 "ID", "Nombre", "EPS", "Fecha de Nacimiento"
             }
         ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.Object.class
+            };
             boolean[] canEdit = new boolean [] {
                 false, false, false, false
             };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
             }
         });
         jScrollPane1.setViewportView(TB_ListaPacientes);
+        if (TB_ListaPacientes.getColumnModel().getColumnCount() > 0) {
+            TB_ListaPacientes.getColumnModel().getColumn(0).setHeaderValue("ID");
+            TB_ListaPacientes.getColumnModel().getColumn(1).setHeaderValue("Nombre");
+            TB_ListaPacientes.getColumnModel().getColumn(2).setHeaderValue("EPS");
+            TB_ListaPacientes.getColumnModel().getColumn(3).setHeaderValue("Fecha de Nacimiento");
+        }
 
         LB_title.setText("Menú principal - Gestión Hospitalaria");
 
         BTN_ActualizarLista.setText("Actualizar Lista");
+        BTN_ActualizarLista.addActionListener(this::BTN_ActualizarListaActionPerformed);
 
         BTN_AgregarPaciente.setText("Agregar Paciente");
+        BTN_AgregarPaciente.addActionListener(this::BTN_AgregarPacienteActionPerformed);
 
         BTN_EliminarPaciente.setText("Eliminar Paciente");
+        BTN_EliminarPaciente.addActionListener(this::BTN_EliminarPacienteActionPerformed);
 
         BTN_ordenarID.setText("Ordenar Por ID");
+        BTN_ordenarID.addActionListener(this::BTN_ordenarIDActionPerformed);
 
         BTN_OrdenarNombre.setText("Ordenar por Nombre");
+        BTN_OrdenarNombre.addActionListener(this::BTN_OrdenarNombreActionPerformed);
 
         BTN_GuardarYSalir.setText("Guardar y Salir");
+        BTN_GuardarYSalir.addActionListener(this::BTN_GuardarYSalirActionPerformed);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -81,10 +120,6 @@ public class MenuPrincipalGrafica extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(LB_title)
-                        .addGap(62, 62, 62))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
@@ -104,7 +139,11 @@ public class MenuPrincipalGrafica extends javax.swing.JFrame {
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(113, 113, 113)
                                 .addComponent(BTN_GuardarYSalir)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 49, Short.MAX_VALUE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 49, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(LB_title)
+                        .addGap(66, 66, 66)))
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 360, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -117,8 +156,9 @@ public class MenuPrincipalGrafica extends javax.swing.JFrame {
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 307, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
+                        .addGap(14, 14, 14)
                         .addComponent(LB_title)
-                        .addGap(59, 59, 59)
+                        .addGap(45, 45, 45)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(BTN_ActualizarLista)
                             .addComponent(BTN_AgregarPaciente))
@@ -135,6 +175,105 @@ public class MenuPrincipalGrafica extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void BTN_ActualizarListaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BTN_ActualizarListaActionPerformed
+        actualizarListaPacientes();
+    }//GEN-LAST:event_BTN_ActualizarListaActionPerformed
+
+    private void BTN_EliminarPacienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BTN_EliminarPacienteActionPerformed
+        int id_Selected;
+        if ((id_Selected = TB_ListaPacientes.getSelectedRow()) != -1) {
+
+            if ((JOptionPane.showConfirmDialog(
+                    rootPane,
+                    "¿Está Seguro de eliminar al paciente seleccionado?", "Confirmar elminado",
+                    JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE)) == JOptionPane.YES_OPTION) {
+                if (listaPacientes.borrarPaciente((Integer) modeloTabla.getValueAt(id_Selected, 0))) {
+                    actualizarListaPacientes();
+
+                    JOptionPane.showMessageDialog(
+                            this,
+                            "Paciente eliminado correctamente",
+                            "Éxito",
+                            JOptionPane.INFORMATION_MESSAGE
+                    );
+                } else {
+                    JOptionPane.showMessageDialog(
+                            this,
+                            "Paciente no encontrado",
+                            "Error",
+                            JOptionPane.ERROR_MESSAGE
+                    );
+                }
+            }
+
+        } else {
+            JOptionPane.showMessageDialog(rootPane, "Seleccione un Paciente a Eliminar", "Paciente no seleccionado", JOptionPane.WARNING_MESSAGE);
+        }
+
+    }//GEN-LAST:event_BTN_EliminarPacienteActionPerformed
+
+    private void BTN_ordenarIDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BTN_ordenarIDActionPerformed
+        ordenarID = true;
+        actualizarListaPacientes();
+    }//GEN-LAST:event_BTN_ordenarIDActionPerformed
+
+    private void BTN_OrdenarNombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BTN_OrdenarNombreActionPerformed
+        ordenarID = false;
+        actualizarListaPacientes();
+    }//GEN-LAST:event_BTN_OrdenarNombreActionPerformed
+
+    private void BTN_AgregarPacienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BTN_AgregarPacienteActionPerformed
+        AgregarPaciente graficaPaciente = new AgregarPaciente(listaPacientes, this);
+        graficaPaciente.setVisible(true);
+    }//GEN-LAST:event_BTN_AgregarPacienteActionPerformed
+
+    private void BTN_GuardarYSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BTN_GuardarYSalirActionPerformed
+        int confirmacion = JOptionPane.showConfirmDialog(
+                this,
+                "¿Está seguro que desea guardar y salir?\n No para salir sin Guardar",
+                "Confirmar salida",
+                JOptionPane.YES_NO_CANCEL_OPTION,
+                JOptionPane.QUESTION_MESSAGE
+        );
+
+        if (confirmacion == JOptionPane.YES_OPTION) {
+            listaPacientes.rescribirArchivo();  // Guardar datos            
+            System.out.println("[INFO]: Datos guardados. Cerrando ventana...");
+            dispose();
+            ventanaPadre.setVisible(true);
+        }
+        
+        if (confirmacion == JOptionPane.NO_OPTION){
+            System.out.println("[INFO]: Guardando sin datos. Cerrando ventana...");
+            dispose();
+            ventanaPadre.setVisible(true);
+        }
+    }//GEN-LAST:event_BTN_GuardarYSalirActionPerformed
+
+    
+
+    public void actualizarListaPacientes() {
+        System.out.println("[INFO]: Actualizando Lista de pacientes...");
+
+        //Borrar la tabla actual
+        modeloTabla.setRowCount(0);
+
+        // Dependiendo de si se ha tocado el botón de ordenar por ID o nombre, organizarla a fin
+        List<Paciente> listaTemporal;
+        if (ordenarID) {
+            listaTemporal = listaPacientes.listaPacientesID();
+        } else {
+            listaTemporal = listaPacientes.listaPacientesNombre();
+        }
+        // Añadir los datos al modelo
+        for (Paciente paciente : listaTemporal) {
+            modeloTabla.addRow(paciente.toArray());
+        }
+        System.out.println("[INFO]: Finalizada Actualización, cantidad de pacientes: " + listaTemporal.size());
+        // Mostrar lista de pacientes en consola
+        // listaPacientes.imprimirListaPacientes();
+    }
 
     /**
      * @param args the command line arguments
@@ -157,8 +296,16 @@ public class MenuPrincipalGrafica extends javax.swing.JFrame {
         }
         //</editor-fold>
 
+        if (listaPacientes == null) {
+            System.out.println("[INFO]: Detectada la ejecución desde MenuPrincipalGrafica, llamando a Menu Inicio Grafica\nDe preferencia iniciar el programa desde MenuInicioGrafica");
+            MenuInicioGrafica xd = new MenuInicioGrafica();
+            xd.setVisible(true);
+            return;
+        }
+
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new MenuPrincipalGrafica().setVisible(true));
+        java.awt.EventQueue.invokeLater(() -> new MenuPrincipalGrafica(listaPacientes, ventanaPadre).setVisible(true));
+        System.out.println("[INFO]: Inicializado el Menú Principal");
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
