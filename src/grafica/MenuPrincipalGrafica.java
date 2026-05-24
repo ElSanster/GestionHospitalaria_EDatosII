@@ -29,18 +29,18 @@ public class MenuPrincipalGrafica extends javax.swing.JFrame {
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
-        jLabel1 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
-        jButton6 = new javax.swing.JButton();
+        TB_ListaPacientes = new javax.swing.JTable();
+        LB_title = new javax.swing.JLabel();
+        BTN_ActualizarLista = new javax.swing.JButton();
+        BTN_AgregarPaciente = new javax.swing.JButton();
+        BTN_EliminarPaciente = new javax.swing.JButton();
+        BTN_ordenarID = new javax.swing.JButton();
+        BTN_OrdenarNombre = new javax.swing.JButton();
+        BTN_GuardarYSalir = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        TB_ListaPacientes.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -59,21 +59,21 @@ public class MenuPrincipalGrafica extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(TB_ListaPacientes);
 
-        jLabel1.setText("Menú principal - Gestión Hospitalaria");
+        LB_title.setText("Menú principal - Gestión Hospitalaria");
 
-        jButton1.setText("Actualizar Lista");
+        BTN_ActualizarLista.setText("Actualizar Lista");
 
-        jButton2.setText("Agregar Paciente");
+        BTN_AgregarPaciente.setText("Agregar Paciente");
 
-        jButton3.setText("Eliminar Paciente");
+        BTN_EliminarPaciente.setText("Eliminar Paciente");
 
-        jButton4.setText("Ordenar Por ID");
+        BTN_ordenarID.setText("Ordenar Por ID");
 
-        jButton5.setText("Ordenar por Nombre");
+        BTN_OrdenarNombre.setText("Ordenar por Nombre");
 
-        jButton6.setText("Guardar y Salir");
+        BTN_GuardarYSalir.setText("Guardar y Salir");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -83,7 +83,7 @@ public class MenuPrincipalGrafica extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel1)
+                        .addComponent(LB_title)
                         .addGap(62, 62, 62))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -91,19 +91,19 @@ public class MenuPrincipalGrafica extends javax.swing.JFrame {
                                 .addGap(42, 42, 42)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jButton1)
+                                        .addComponent(BTN_ActualizarLista)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(jButton2))
+                                        .addComponent(BTN_AgregarPaciente))
                                     .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jButton4)
+                                        .addComponent(BTN_ordenarID)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(jButton3))))
+                                        .addComponent(BTN_EliminarPaciente))))
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(96, 96, 96)
-                                .addComponent(jButton5))
+                                .addComponent(BTN_OrdenarNombre))
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(113, 113, 113)
-                                .addComponent(jButton6)))
+                                .addComponent(BTN_GuardarYSalir)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 49, Short.MAX_VALUE)))
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 360, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -117,19 +117,19 @@ public class MenuPrincipalGrafica extends javax.swing.JFrame {
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 307, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1)
+                        .addComponent(LB_title)
                         .addGap(59, 59, 59)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jButton1)
-                            .addComponent(jButton2))
+                            .addComponent(BTN_ActualizarLista)
+                            .addComponent(BTN_AgregarPaciente))
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jButton3)
-                            .addComponent(jButton4))
+                            .addComponent(BTN_EliminarPaciente)
+                            .addComponent(BTN_ordenarID))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButton5)
+                        .addComponent(BTN_OrdenarNombre)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton6)
+                        .addComponent(BTN_GuardarYSalir)
                         .addGap(43, 43, 43))))
         );
 
@@ -162,14 +162,14 @@ public class MenuPrincipalGrafica extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
-    private javax.swing.JButton jButton6;
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JButton BTN_ActualizarLista;
+    private javax.swing.JButton BTN_AgregarPaciente;
+    private javax.swing.JButton BTN_EliminarPaciente;
+    private javax.swing.JButton BTN_GuardarYSalir;
+    private javax.swing.JButton BTN_OrdenarNombre;
+    private javax.swing.JButton BTN_ordenarID;
+    private javax.swing.JLabel LB_title;
+    private javax.swing.JTable TB_ListaPacientes;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
     // End of variables declaration//GEN-END:variables
 }
