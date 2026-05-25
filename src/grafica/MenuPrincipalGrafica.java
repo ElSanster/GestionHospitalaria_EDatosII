@@ -57,6 +57,7 @@ public class MenuPrincipalGrafica extends javax.swing.JFrame {
         BTN_ordenarID = new javax.swing.JButton();
         BTN_OrdenarNombre = new javax.swing.JButton();
         BTN_GuardarYSalir = new javax.swing.JButton();
+        BTN_Ruta = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -114,6 +115,9 @@ public class MenuPrincipalGrafica extends javax.swing.JFrame {
         BTN_GuardarYSalir.setText("Guardar y Salir");
         BTN_GuardarYSalir.addActionListener(this::BTN_GuardarYSalirActionPerformed);
 
+        BTN_Ruta.setText("Calcular ruta entre sedes");
+        BTN_Ruta.addActionListener(this::BTN_RutaActionPerformed);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -121,29 +125,25 @@ public class MenuPrincipalGrafica extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(42, 42, 42)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(BTN_ActualizarLista)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(BTN_AgregarPaciente))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(BTN_ordenarID)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(BTN_EliminarPaciente))))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(96, 96, 96)
-                                .addComponent(BTN_OrdenarNombre))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(113, 113, 113)
-                                .addComponent(BTN_GuardarYSalir)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 49, Short.MAX_VALUE))
+                        .addContainerGap(21, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(BTN_ordenarID, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(BTN_OrdenarNombre, javax.swing.GroupLayout.DEFAULT_SIZE, 175, Short.MAX_VALUE)
+                            .addComponent(BTN_ActualizarLista, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(BTN_EliminarPaciente, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(BTN_Ruta, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(BTN_AgregarPaciente, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(LB_title)
-                        .addGap(66, 66, 66)))
+                        .addGap(66, 66, 66))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(137, 137, 137)
+                        .addComponent(BTN_GuardarYSalir)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 360, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -151,26 +151,26 @@ public class MenuPrincipalGrafica extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 307, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(14, 14, 14)
                         .addComponent(LB_title)
                         .addGap(45, 45, 45)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(BTN_ActualizarLista)
                             .addComponent(BTN_AgregarPaciente))
-                        .addGap(18, 18, 18)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(BTN_EliminarPaciente)
                             .addComponent(BTN_ordenarID))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(BTN_OrdenarNombre)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(BTN_Ruta)
+                            .addComponent(BTN_OrdenarNombre))
+                        .addGap(64, 64, 64)
                         .addComponent(BTN_GuardarYSalir)
-                        .addGap(43, 43, 43))))
+                        .addGap(63, 63, 63))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 307, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -251,7 +251,11 @@ public class MenuPrincipalGrafica extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_BTN_GuardarYSalirActionPerformed
 
-    
+    private void BTN_RutaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BTN_RutaActionPerformed
+        DatosRuta dt = new DatosRuta(listaPacientes, this);
+        this.setVisible(true);
+        dt.setVisible(true);
+    }//GEN-LAST:event_BTN_RutaActionPerformed
 
     public void actualizarListaPacientes() {
         System.out.println("[INFO]: Actualizando Lista de pacientes...");
@@ -314,6 +318,7 @@ public class MenuPrincipalGrafica extends javax.swing.JFrame {
     private javax.swing.JButton BTN_EliminarPaciente;
     private javax.swing.JButton BTN_GuardarYSalir;
     private javax.swing.JButton BTN_OrdenarNombre;
+    private javax.swing.JButton BTN_Ruta;
     private javax.swing.JButton BTN_ordenarID;
     private javax.swing.JLabel LB_title;
     private javax.swing.JTable TB_ListaPacientes;

@@ -1,38 +1,46 @@
 package main;
+
 import java.util.*;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Natt
  */
 public class RedHospitalaria {
+
     // lista de adyacencia principal: Nombre y objeto sede
-    private Map<String,SedeHospital> mapaSedes;
-    
-    public RedHospitalaria(){
+    private Map<String, SedeHospital> mapaSedes;
+
+    public RedHospitalaria() {
         this.mapaSedes = new HashMap<>();
     }
-    public void registrarSede(String nombre){
+
+    public void registrarSede(String nombre) {
         mapaSedes.putIfAbsent(nombre, new SedeHospital(nombre));
     }
+
     //conectar dos sedes con una distancia bidireccional
-    public void conectarSedes(String origen, String destino, int distancia){
+    public void conectarSedes(String origen, String destino, int distancia) {
         registrarSede(origen);
         registrarSede(destino);
-        
+
         SedeHospital sOrigen = mapaSedes.get(origen);
         SedeHospital sDestino = mapaSedes.get(destino);
-        
+
         sOrigen.conectarCon(sDestino, distancia);
         sDestino.conectarCon(sOrigen, distancia);
     }
+
     // Algoritmo de Dijkstra para calcular la ruta con menor distancia
     // Que es el algoritmo de Dijkstra? es un método de búsqueda eficiente utilizado para encontrar 
     // la ruta más corta desde un nodo (o vértice) de origen hacia todos los demás nodos en un grafo ponderado
-    public void calcularRutaMasCorta(String nombreOrigen, String nombreDestino){
+    public void calcularRutaMasCorta(String nombreOrigen, String nombreDestino) {
         SedeHospital origen = mapaSedes.get(nombreOrigen);
         SedeHospital destino = mapaSedes.get(nombreDestino);
-        if (origen == null || destino == null){
-            System.out.println("Error: una o ninguna de las sedes exiten en la red");
+        if (origen == null || destino == null) {
+            System.out.println("Error: una o ninguna de las sedes existen en la red");
             return;
         }
         // estructura de contlor del algoritmo
@@ -40,54 +48,128 @@ public class RedHospitalaria {
         Map<SedeHospital, SedeHospital> predecesores = new HashMap<>();
         // Fila de prioridad, siempre evalua primero la sede mas cercana
         PriorityQueue<SedeHospital> filaPrioridad = new PriorityQueue<>(
-            Comparator.comparingInt(s -> distancias.getOrDefault(s, Integer.MAX_VALUE))
+                Comparator.comparingInt(s -> distancias.getOrDefault(s, Integer.MAX_VALUE))
         );
         // iniciamos todas las distancias en infinito
-        for (SedeHospital s : mapaSedes.values()){
+        for (SedeHospital s : mapaSedes.values()) {
             distancias.put(s, Integer.MAX_VALUE);
         }
         distancias.put(origen, 0);
         filaPrioridad.add(origen);
-        
-        while (!filaPrioridad.isEmpty()){
+
+        while (!filaPrioridad.isEmpty()) {
             SedeHospital actual = filaPrioridad.poll();
             // si llegamos al destion, terminamos la busqueda
-            if (actual.equals(destino)) break;
+            if (actual.equals(destino)) {
+                break;
+            }
             //
-            for (Map.Entry<SedeHospital, Integer> conexion : actual.getConexiones().entrySet()){
+            for (Map.Entry<SedeHospital, Integer> conexion : actual.getConexiones().entrySet()) {
                 SedeHospital vecino = conexion.getKey();
                 int pesoArista = conexion.getValue();
-                
+
                 int nuevaDistancia = distancias.get(actual) + pesoArista;
-                
+
                 // si encuentra un camino mas corto al vecino, actualiza los datos
-                if (nuevaDistancia < distancias.get(vecino)){
+                if (nuevaDistancia < distancias.get(vecino)) {
                     distancias.put(vecino, nuevaDistancia);
                     predecesores.put(vecino, actual);
                     // Actuaalizamos la posicion del vecino en la lista de prioridad
                     filaPrioridad.remove(vecino);
                     filaPrioridad.add(vecino);
-                    
+
                 }
             }
         }
         //
-        if (distancias.get(destino) == Integer.MAX_VALUE){
-            System.out.println("No existe una ruta fisica de conexion entre "+ nombreOrigen + " Y "+ nombreDestino);
+        if (distancias.get(destino) == Integer.MAX_VALUE) {
+            System.out.println("No existe una ruta fisica de conexion entre " + nombreOrigen + " Y " + nombreDestino);
         } else {
-            System.out.println("\n"+"=".repeat(60));
+            System.out.println("\n" + "=".repeat(60));
             System.out.println("---Ruta mas optimizada encontrada---");
             System.out.println("=".repeat(60));
-            System.out.println("Distancia total minima: "+distancias.get(destino)+"km");
+            System.out.println("Distancia total minima: " + distancias.get(destino) + "km");
             System.out.print("Trazado de la ruta: ");
             mostrarCaminoRec(destino, predecesores);
-            System.out.println("\n"+"=".repeat(60));
+            System.out.println("\n" + "=".repeat(60));
+        }
+    }
+
+    //Misma madre de arriba pero acondicionada a usar JOptionPane en lugar de sout
+    public void calcularRutaMasCorta(String nombreOrigen, String nombreDestino, JFrame padre) {
+        SedeHospital origen = mapaSedes.get(nombreOrigen);
+        SedeHospital destino = mapaSedes.get(nombreDestino);
+        if (origen == null || destino == null) {
+            JOptionPane.showMessageDialog(padre, "Una o ninguna de las sedes existen en la red", "Error: Sede Inválida", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        // estructura de contlor del algoritmo
+        Map<SedeHospital, Integer> distancias = new HashMap<>();
+        Map<SedeHospital, SedeHospital> predecesores = new HashMap<>();
+        // Fila de prioridad, siempre evalua primero la sede mas cercana
+        PriorityQueue<SedeHospital> filaPrioridad = new PriorityQueue<>(
+                Comparator.comparingInt(s -> distancias.getOrDefault(s, Integer.MAX_VALUE))
+        );
+        // iniciamos todas las distancias en infinito
+        for (SedeHospital s : mapaSedes.values()) {
+            distancias.put(s, Integer.MAX_VALUE);
+        }
+        distancias.put(origen, 0);
+        filaPrioridad.add(origen);
+
+        while (!filaPrioridad.isEmpty()) {
+            SedeHospital actual = filaPrioridad.poll();
+            // si llegamos al destion, terminamos la busqueda
+            if (actual.equals(destino)) {
+                break;
+            }
+            //
+            for (Map.Entry<SedeHospital, Integer> conexion : actual.getConexiones().entrySet()) {
+                SedeHospital vecino = conexion.getKey();
+                int pesoArista = conexion.getValue();
+
+                int nuevaDistancia = distancias.get(actual) + pesoArista;
+
+                // si encuentra un camino mas corto al vecino, actualiza los datos
+                if (nuevaDistancia < distancias.get(vecino)) {
+                    distancias.put(vecino, nuevaDistancia);
+                    predecesores.put(vecino, actual);
+                    // Actuaalizamos la posicion del vecino en la lista de prioridad
+                    filaPrioridad.remove(vecino);
+                    filaPrioridad.add(vecino);
+
+                }
+            }
+        }
+        //
+        if (distancias.get(destino) == Integer.MAX_VALUE) {
+            JOptionPane.showMessageDialog(padre, "No existe una ruta fisica de conexion entre " + nombreOrigen + " Y " + nombreDestino, "Error: Ruta no encontrada", JOptionPane.WARNING_MESSAGE);
+        } else {
+            String mensaje =  mostrarCaminoRecJOption(destino, predecesores);
+            JOptionPane.showMessageDialog(
+                    padre,
+                    "Distancia total minima: " + distancias.get(destino) + "km\nTrazado de la ruta: " + mensaje,
+                    "Ruta más optimizada encontrada.",
+                    JOptionPane.INFORMATION_MESSAGE
+            );
         }
     }
     
-    private void mostrarCaminoRec(SedeHospital nodo, Map<SedeHospital, SedeHospital> predecesores){
-        if (nodo == null) return;
+    // Adaptado para Usar JOption, de la Interfaz Gráfica
+    private String mostrarCaminoRecJOption(SedeHospital nodo, Map<SedeHospital, SedeHospital> predecesores) {
+        if (nodo == null) {
+            return "";
+        }
+        String caminoAnterior = mostrarCaminoRecJOption(predecesores.get(nodo),predecesores);
+        return caminoAnterior + (caminoAnterior.isEmpty() ? "" : " -> ")+nodo.getNombre();
+    }
+    
+    
+    private void mostrarCaminoRec(SedeHospital nodo, Map<SedeHospital, SedeHospital> predecesores) {
+        if (nodo == null) {
+            return;
+        }
         mostrarCaminoRec(predecesores.get(nodo), predecesores);
-        System.out.print(nodo.getNombre() + (predecesores.containsKey(nodo) ? "" : " ->"));
+        System.out.print(nodo.getNombre() + (predecesores.containsKey(nodo) ? "" : " -> "));
     }
 }

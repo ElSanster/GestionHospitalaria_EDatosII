@@ -5,7 +5,6 @@
 package grafica;
 
 import java.time.LocalDate;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import main.ListaPacientes;
 import main.Paciente;
@@ -21,7 +20,9 @@ public class AgregarPaciente extends javax.swing.JFrame {
     static ListaPacientes listaPacientes;
     static private MenuPrincipalGrafica ventanaPadre;
     /**
-     * Creates new form AgregarPaciente
+     * Lanza una ventana para agregar la lista de pacientes
+     * @param listapacientes Lista con las herramientas para añadir
+     * @param padre Ventana padre a llamar al terminar
      */
     public AgregarPaciente(ListaPacientes listapacientes, MenuPrincipalGrafica padre) {
         initComponents();
@@ -155,8 +156,10 @@ public class AgregarPaciente extends javax.swing.JFrame {
             listaPacientes.insertarPacienteEnGrafo(new Paciente(nombre, eps, fechNac, id));            
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(rootPane, "El ID debe ser un número entero", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
         } catch (java.time.format.DateTimeParseException e){
             JOptionPane.showMessageDialog(rootPane, "Formato de Fecha inválido", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
         }
         JOptionPane.showMessageDialog(rootPane, "Paciente añadido Correctamente");
         ventanaPadre.actualizarListaPacientes();

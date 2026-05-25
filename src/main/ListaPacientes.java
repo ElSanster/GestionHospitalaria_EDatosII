@@ -7,7 +7,7 @@ import java.util.*;
 /*
  * @author El_Sanster & Natt
  */
-//Inicializa un grafo de Pacientes y carga datos desde el csv
+// Inicializa un grafo de Pacientes y carga datos desde el csv
 public class ListaPacientes {
     String nombreArchivo;
     // Hacemos el mapa que funcionara como nuestro Grafo 
@@ -110,7 +110,7 @@ public class ListaPacientes {
             String fechatxt = sc.nextLine();
             LocalDate fechaNac = LocalDate.parse(fechatxt);
 
-            // agregamos al grafo usando el metodo de insertat...
+            // agregamos al grafo usando el metodo de insertar...
             Paciente nuevo = new Paciente(nombre, eps, fechaNac, id);
             this.insertarPacienteEnGrafo(nuevo);
             rescribirArchivo();
@@ -254,8 +254,7 @@ public class ListaPacientes {
         }
     }
     
-    // Verificar que exista este id
-    // 
+    // Era bait, nunca hubo una funcion para verificar ids
     
     public static void main(String[] args){
         //Nombre del archivo CSV donde se guardaran los datos
